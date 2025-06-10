@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { TrendingUp, BarChart3, Users, Shield, ChevronRight, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
-import { signUp, signIn, signOutUser, onAuthStateChange, getCurrentUser, getUserData } from './components/auth.js';
+import { signUp, signIn, onAuthStateChange, getCurrentUser, getUserData } from './components/auth.js';
 
 // Type definitions
 interface FormData {
@@ -37,9 +37,7 @@ export default function LandingPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState<UserData | null>(null);
   const [message, setMessage] = useState<Message>({ text: '', type: '' });
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -52,11 +50,11 @@ export default function LandingPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChange(async (authUser: AuthUser | null) => {
       if (authUser) {
-        setUser(authUser);
         // Get additional user data from Firestore
         const result = await getUserData(authUser.uid);
         if (result.success) {
-          setUserData(result.data as UserData);
+          // User data retrieved successfully
+          console.log('User data loaded:', result.data);
         }
         setLoading(false);
         // Redirect authenticated users to dashboard
@@ -64,8 +62,6 @@ export default function LandingPage() {
         router.push('/dashboard');
       } else {
         // User is not authenticated, stay on landing page
-        setUser(null);
-        setUserData(null);
         setLoading(false);
       }
     });
