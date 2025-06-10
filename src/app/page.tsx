@@ -18,12 +18,7 @@ interface Message {
   type: 'success' | 'error' | '';
 }
 
-interface UserData {
-  uid: string;
-  email: string;
-  displayName: string;
-  // Add other user data properties as needed
-}
+
 
 interface AuthUser {
   uid: string;
