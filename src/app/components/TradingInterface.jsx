@@ -817,26 +817,31 @@ export default function TradingInterface() {
   }
 
   const handleTabChange = (tab) => {
-    if (tab === activeView) return; // Don't reload if same tab
-    
-    setIsLoading(true);
-    
-    // Set custom loading message for each tab
-    const messages = {
-      'Portfolio': 'Loading your portfolio...',
-      'Watchlist': 'Loading your watchlist...',
-      'Orders': 'Loading your orders...',
-      'Analytics': 'Loading analytics dashboard...'
-    };
-    
-    setLoadingMessage(messages[tab] || 'Loading...');
-    
-    // Simulate 3-second loading
-    setTimeout(() => {
-      setActiveView(tab);
-      setIsLoading(false);
-    }, 2500);
+  console.log('handleTabChange called with:', tab, 'current activeView:', activeView);
+
+  if (tab === activeView) {
+    console.log('Same tab clicked, returning early');
+    return; // Don't reload if same tab
+  }
+
+  console.log('Setting activeView to:', tab);
+  
+  setActiveView(tab);
+  setIsLoading(true);
+  
+  const messages = {
+    'Portfolio': 'Loading your portfolio...',
+    'Watchlist': 'Loading your watchlist...',
+    'Orders': 'Loading your orders...',
+    'Analytics': 'Loading analytics dashboard...'
   };
+  
+  setLoadingMessage(messages[tab] || 'Loading...');
+  
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 2000);
+};
 
   const renderContent = () => {
     if (isLoading) {
@@ -878,16 +883,17 @@ export default function TradingInterface() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
-      <DashboardHeader
-        isRefreshing={isRefreshing}
-        onRefresh={handleRefresh}
-        userName={getDisplayName()}
-        activeTab={activeView}
-        onTabChange={handleTabChange}
-        onSignOut={handleSignOut} // Optional: add sign out functionality
-        userEmail={user?.email}
-      />
+      <div className="sticky top-0 z-40 bg-white shadow-sm">
+        <DashboardHeader
+          isRefreshing={isRefreshing}
+          onRefresh={handleRefresh}
+          userName={getDisplayName()}
+          activeTab={activeView}
+          onTabChange={handleTabChange}
+          onSignOut={handleSignOut}
+          userEmail={user?.email}
+        />
+      </div>
       
       <div className="content-area">
         {renderContent()}
