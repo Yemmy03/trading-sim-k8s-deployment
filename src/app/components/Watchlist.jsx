@@ -98,16 +98,16 @@ const Watchlist = () => {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 p-4 sm:p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Watchlist</h2>
-          <p className="text-gray-600">Track your favorite stocks</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Watchlist</h2>
+          <p className="text-sm sm:text-base text-gray-600">Track your favorite stocks</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center justify-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto"
         >
           <Plus className="h-4 w-4" />
           <span>Add Stock</span>
@@ -122,62 +122,62 @@ const Watchlist = () => {
           placeholder="Search watchlist..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
         />
       </div>
 
-      {/* Watchlist Table */}
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+      {/* Desktop/Tablet Table View */}
+      <div className="hidden sm:block bg-white rounded-xl shadow-sm border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="text-left p-4 font-semibold text-gray-700">Stock</th>
-                <th className="text-left p-4 font-semibold text-gray-700">Price</th>
-                <th className="text-left p-4 font-semibold text-gray-700">Change</th>
-                <th className="text-left p-4 font-semibold text-gray-700">Volume</th>
-                <th className="text-left p-4 font-semibold text-gray-700">Market Cap</th>
-                <th className="text-left p-4 font-semibold text-gray-700">Action</th>
+                <th className="text-left p-3 md:p-4 font-semibold text-gray-700 text-sm md:text-base">Stock</th>
+                <th className="text-left p-3 md:p-4 font-semibold text-gray-700 text-sm md:text-base">Price</th>
+                <th className="text-left p-3 md:p-4 font-semibold text-gray-700 text-sm md:text-base">Change</th>
+                <th className="text-left p-3 md:p-4 font-semibold text-gray-700 text-sm md:text-base hidden lg:table-cell">Volume</th>
+                <th className="text-left p-3 md:p-4 font-semibold text-gray-700 text-sm md:text-base hidden lg:table-cell">Market Cap</th>
+                <th className="text-left p-3 md:p-4 font-semibold text-gray-700 text-sm md:text-base">Action</th>
               </tr>
             </thead>
             <tbody>
               {filteredItems.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-gray-500">
+                  <td colSpan={6} className="text-center py-8 text-gray-500 text-sm sm:text-base">
                     {searchTerm ? 'No stocks found matching your search' : 'Your watchlist is empty'}
                   </td>
                 </tr>
               ) : (
                 filteredItems.map((item) => (
                   <tr key={item.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="p-4">
-                      <div className="flex items-center space-x-3">
-                        <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                        <div>
-                          <div className="font-semibold text-gray-900">{item.symbol}</div>
-                          <div className="text-sm text-gray-600">{item.company}</div>
+                    <td className="p-3 md:p-4">
+                      <div className="flex items-center space-x-2 md:space-x-3">
+                        <Star className="h-3 w-3 md:h-4 md:w-4 text-yellow-500 fill-current flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="font-semibold text-gray-900 text-sm md:text-base truncate">{item.symbol}</div>
+                          <div className="text-xs md:text-sm text-gray-600 truncate">{item.company}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">
-                      <div className="font-semibold text-gray-900">{formatCurrency(item.currentPrice)}</div>
+                    <td className="p-3 md:p-4">
+                      <div className="font-semibold text-gray-900 text-sm md:text-base">{formatCurrency(item.currentPrice)}</div>
                     </td>
-                    <td className="p-4">
+                    <td className="p-3 md:p-4">
                       <div className={`flex items-center space-x-1 ${item.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                         {item.change >= 0 ? (
-                          <TrendingUp className="h-4 w-4" />
+                          <TrendingUp className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
                         ) : (
-                          <TrendingDown className="h-4 w-4" />
+                          <TrendingDown className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
                         )}
-                        <div>
-                          <div className="font-semibold">{formatCurrency(Math.abs(item.change))}</div>
-                          <div className="text-sm">{formatPercent(item.changePercent)}</div>
+                        <div className="min-w-0">
+                          <div className="font-semibold text-xs md:text-sm">{formatCurrency(Math.abs(item.change))}</div>
+                          <div className="text-xs">{formatPercent(item.changePercent)}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4 text-gray-900">{item.volume}</td>
-                    <td className="p-4 text-gray-900">{item.marketCap}</td>
-                    <td className="p-4">
+                    <td className="p-3 md:p-4 text-gray-900 text-sm md:text-base hidden lg:table-cell">{item.volume}</td>
+                    <td className="p-3 md:p-4 text-gray-900 text-sm md:text-base hidden lg:table-cell">{item.marketCap}</td>
+                    <td className="p-3 md:p-4">
                       <button
                         onClick={() => handleRemoveFromWatchlist(item.id)}
                         className="text-red-600 hover:text-red-800 p-1 rounded hover:bg-red-50"
@@ -193,10 +193,68 @@ const Watchlist = () => {
         </div>
       </div>
 
+      {/* Mobile Card View */}
+      <div className="block sm:hidden space-y-3">
+        {filteredItems.length === 0 ? (
+          <div className="bg-white rounded-lg p-6 text-center text-gray-500">
+            {searchTerm ? 'No stocks found matching your search' : 'Your watchlist is empty'}
+          </div>
+        ) : (
+          filteredItems.map((item) => (
+            <div key={item.id} className="bg-white rounded-lg shadow-sm border p-4">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                  <Star className="h-4 w-4 text-yellow-500 fill-current flex-shrink-0" />
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-gray-900 text-base">{item.symbol}</div>
+                    <div className="text-sm text-gray-600 truncate">{item.company}</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleRemoveFromWatchlist(item.id)}
+                  className="text-red-600 hover:text-red-800 p-1 rounded hover:bg-red-50 ml-2 flex-shrink-0"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">Price</div>
+                  <div className="font-semibold text-gray-900">{formatCurrency(item.currentPrice)}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">Change</div>
+                  <div className={`flex items-center space-x-1 ${item.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {item.change >= 0 ? (
+                      <TrendingUp className="h-3 w-3" />
+                    ) : (
+                      <TrendingDown className="h-3 w-3" />
+                    )}
+                    <div>
+                      <span className="font-semibold text-sm">{formatCurrency(Math.abs(item.change))}</span>
+                      <span className="text-xs ml-1">{formatPercent(item.changePercent)}</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">Volume</div>
+                  <div className="text-sm text-gray-900">{item.volume}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">Market Cap</div>
+                  <div className="text-sm text-gray-900">{item.marketCap}</div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
       {/* Add Stock Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-md">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Add Stock to Watchlist</h3>
             <div className="space-y-4">
               <div>
@@ -208,10 +266,10 @@ const Watchlist = () => {
                   value={newSymbol}
                   onChange={(e) => setNewSymbol(e.target.value)}
                   placeholder="e.g., AAPL"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                 />
               </div>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
                 <button
                   onClick={() => setShowAddModal(false)}
                   className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"

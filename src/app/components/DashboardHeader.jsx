@@ -53,8 +53,20 @@ export default function DashboardHeader({
     <div className="bg-white border-b border-gray-200 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-3 lg:py-4">
-          {/* Left side - Logo and Navigation */}
+          {/* Left side - Mobile Menu, Logo and Navigation */}
           <div className="flex items-center space-x-4 lg:space-x-8">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => {
+                console.log('Hamburger menu clicked, current showMobileMenu:', showMobileMenu);
+                setShowMobileMenu(!showMobileMenu);
+                console.log('Setting showMobileMenu to:', !showMobileMenu);
+              }}
+              className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              {showMobileMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+
             <div className="flex items-center space-x-2">
               <div className="w-7 h-7 lg:w-8 lg:h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xs lg:text-sm">T</span>
@@ -78,18 +90,6 @@ export default function DashboardHeader({
                 </button>
               ))}
             </nav>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => {
-                console.log('Hamburger menu clicked, current showMobileMenu:', showMobileMenu);
-                setShowMobileMenu(!showMobileMenu);
-                console.log('Setting showMobileMenu to:', !showMobileMenu);
-              }}
-              className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              {showMobileMenu ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
           </div>
 
           {/* Right side - User actions */}
