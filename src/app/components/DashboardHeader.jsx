@@ -23,26 +23,23 @@ export default function DashboardHeader({
     const handleClickOutside = (event) => {
       // Check if click is outside mobile menu (include both button and menu content)
       if (showMobileMenu && mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
-        // Also check if click is on the mobile menu button
+
         const mobileMenuButton = document.querySelector('.lg\\:hidden[class*="p-2"]');
         if (!mobileMenuButton || !mobileMenuButton.contains(event.target)) {
           setShowMobileMenu(false);
         }
       }
       
-      // Check if click is outside user menu
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setShowUserMenu(false);
       }
     };
 
-    // Only add event listener if at least one menu is open
     if (showMobileMenu || showUserMenu) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('touchstart', handleClickOutside);
     }
 
-    // Cleanup event listeners
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);

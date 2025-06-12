@@ -589,44 +589,54 @@ const RecentTradesList = ({ trades, onViewAllTrades, className = "", maxTrades }
   const displayedTrades = maxTrades ? trades.slice(0, maxTrades) : trades;
 
   return (
-    <div className={`bg-white rounded-xl p-6 shadow-sm border ${className}`}>
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Trades</h3>
-      
-      {displayedTrades.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          <p className="text-sm">No recent trades</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {displayedTrades.map((trade, index) => (
-            <div key={index} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
-              <div className="flex-1">
-                <div className="flex items-center space-x-2">
-                  <span className="font-semibold text-gray-900">{trade.symbol}</span>
-                  <span className={`text-xs px-2 py-1 rounded font-medium ${
-                    trade.type === 'BUY' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {trade.type}
-                  </span>
-                </div>
-                <div className="text-sm text-gray-600 mt-1">
-                  {trade.shares} shares @ {formatCurrency(trade.price)}
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  {trade.date} {trade.time}
-                </div>
+    <div className={`bg-white rounded-2xl p-6 shadow-md border border-gray-200 ${className}`}>
+    <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Trades</h3>
+
+    {displayedTrades.length === 0 ? (
+      <div className="text-center py-10 text-gray-500">
+        <p className="text-sm">No recent trades</p>
+      </div>
+    ) : (
+      <div className="space-y-4">
+        {displayedTrades.map((trade, index) => (
+          <div
+            key={index}
+            className="flex items-start justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition"
+          >
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm font-semibold text-gray-900">{trade.symbol}</span>
+                <span
+                  className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                    trade.type === 'BUY'
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-red-100 text-red-800'
+                  }`}
+                >
+                  {trade.type}
+                </span>
+              </div>
+              <div className="text-sm text-gray-700">
+                {trade.shares} shares @ {formatCurrency(trade.price)}
+              </div>
+              <div className="text-xs text-gray-500 mt-0.5">
+                {trade.date} &middot; {trade.time}
               </div>
             </div>
-          ))}
-        </div>
-      )}
-      
-      {trades.length > 0 && (
-        <button onClick={onViewAllTrades} className="w-full mt-4 text-emerald-600 hover:text-emerald-700 text-sm font-medium">
-          View All Trades
-        </button>
-      )}
-    </div>
+          </div>
+        ))}
+      </div>
+  )}
+
+  {trades.length > 0 && (
+    <button
+      onClick={onViewAllTrades}
+      className="w-full mt-6 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition"
+    >
+      View All Trades
+    </button>
+  )}
+</div>
   );
 };
 

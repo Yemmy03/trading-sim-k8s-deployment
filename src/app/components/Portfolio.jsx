@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Plus, Activity } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Activity, X } from 'lucide-react';
 
 const Portfolio = ({
   getDisplayName,
@@ -19,16 +19,48 @@ const Portfolio = ({
   formatPercent,
   PortfolioSummary,
   StockSearchList,
-  RecentTradesList
+  RecentTradesList,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="bg-blue-50 min-h-screen py-8">
       {/* Welcome Header */}
-      <div className="mb-8 bg-white rounded-2xl shadow-md p-6 mx-4 animate-fade-in">
+      <div className="mb-8 bg-white rounded-2xl shadow-md p-6 mx-4 animate-fade-in relative">
         <h3 className="text-2xl font-bold text-blue-700 text-center">
           Welcome, {getDisplayName()}!
         </h3>
+        <div className="absolute top-4 right-4">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1.5 rounded-md transition"
+          >
+            Things to do?
+          </button>
+        </div>
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 relative animate-fade-in">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <h2 className="text-xl font-semibold text-blue-700 mb-4 text-center">
+              Functional Components of This Site
+            </h2>
+            <ul className="list-disc list-inside space-y-2 text-gray-700 text-sm">
+              <li>Search and trade</li>
+              <li>Search, delete, and add stocks to watchlist</li>
+              <li>Filter orders</li>
+            </ul>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Summary */}
