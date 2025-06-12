@@ -840,7 +840,7 @@ export default function TradingInterface() {
   
   setTimeout(() => {
     setIsLoading(false);
-  }, 2000);
+  }, 1500);
 };
 
   const renderContent = () => {

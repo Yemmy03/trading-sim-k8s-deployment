@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { Calendar, Filter, Download, Clock, CheckCircle, XCircle, AlertCircle, ChevronRight } from 'lucide-react';
+import { Calendar, Filter, Download, Clock, CheckCircle, XCircle, AlertCircle, ChevronRight, TrendingUp, TrendingDown } from 'lucide-react';
 
 const OrderHistory = () => {
   const [orders] = useState([
@@ -92,30 +92,30 @@ const OrderHistory = () => {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'Filled':
-        return <CheckCircle className="h-4 w-4 text-emerald-600" />;
+        return <CheckCircle className="h-4 w-4 text-emerald-500" />;
       case 'Pending':
-        return <Clock className="h-4 w-4 text-yellow-600" />;
+        return <Clock className="h-4 w-4 text-blue-500 animate-pulse" />;
       case 'Cancelled':
-        return <XCircle className="h-4 w-4 text-red-600" />;
+        return <XCircle className="h-4 w-4 text-red-500" />;
       case 'Partially Filled':
-        return <AlertCircle className="h-4 w-4 text-blue-600" />;
+        return <AlertCircle className="h-4 w-4 text-amber-500" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-600" />;
+        return <Clock className="h-4 w-4 text-slate-400" />;
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
       case 'Filled':
-        return 'bg-emerald-100 text-emerald-800';
+        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
       case 'Pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-blue-50 text-blue-700 border-blue-200 animate-pulse';
       case 'Cancelled':
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-50 text-red-700 border-red-200';
       case 'Partially Filled':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-amber-50 text-amber-700 border-amber-200';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-slate-50 text-slate-700 border-slate-200';
     }
   };
 
@@ -130,259 +130,329 @@ const OrderHistory = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="space-y-4 sm:space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-4 sm:space-y-0">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Order History</h2>
-            <p className="text-sm sm:text-base text-gray-600 mt-1">View and manage your trading history</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-6">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-4 sm:space-y-0">
+            <div className="space-y-2">
+              <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Order History
+              </h1>
+              <p className="text-lg text-slate-600">View and manage your trading history</p>
+            </div>
+            <button
+              onClick={handleExport}
+              className="group flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 min-h-[48px]"
+            >
+              <Download className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+              <span className="font-medium">Export</span>
+            </button>
           </div>
-          <button
-            onClick={handleExport}
-            className="flex items-center justify-center space-x-2 bg-gray-600 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base min-h-[44px]"
-          >
-            <Download className="h-4 w-4" />
-            <span>Export</span>
-          </button>
-        </div>
 
-        {/* Filters */}
-        <div className="bg-white rounded-lg shadow-sm border p-4">
-          <div className="space-y-3 sm:space-y-0 sm:flex sm:flex-wrap sm:gap-4 sm:items-center">
-            <div className="flex items-center space-x-2">
-              <Filter className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Filters:</span>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 flex-1">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[44px]"
-              >
-                <option value="All">All Status</option>
-                <option value="Filled">Filled</option>
-                <option value="Pending">Pending</option>
-                <option value="Cancelled">Cancelled</option>
-                <option value="Partially Filled">Partially Filled</option>
-              </select>
+          {/* Filters */}
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 transition-all duration-300 hover:shadow-xl">
+            <div className="space-y-4 sm:space-y-0 sm:flex sm:flex-wrap sm:gap-6 sm:items-center">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Filter className="h-5 w-5 text-blue-600" />
+                </div>
+                <span className="text-lg font-semibold text-slate-700">Filters</span>
+              </div>
               
-              <select
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[44px]"
-              >
-                <option value="All">All Types</option>
-                <option value="BUY">Buy Orders</option>
-                <option value="SELL">Sell Orders</option>
-              </select>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
+                  className="px-4 py-3 border-2 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:border-blue-300"
+                >
+                  <option value="All">All Status</option>
+                  <option value="Filled">Filled</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="Partially Filled">Partially Filled</option>
+                </select>
+                
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  className="px-4 py-3 border-2 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:border-blue-300"
+                >
+                  <option value="All">All Types</option>
+                  <option value="BUY">Buy Orders</option>
+                  <option value="SELL">Sell Orders</option>
+                </select>
+                
+                <select
+                  value={dateRange}
+                  onChange={(e) => setDateRange(e.target.value)}
+                  className="px-4 py-3 border-2 border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:border-blue-300"
+                >
+                  <option value="7d">Last 7 days</option>
+                  <option value="30d">Last 30 days</option>
+                  <option value="90d">Last 90 days</option>
+                  <option value="1y">Last year</option>
+                </select>
+              </div>
               
-              <select
-                value={dateRange}
-                onChange={(e) => setDateRange(e.target.value)}
-                className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[44px]"
-              >
-                <option value="7d">Last 7 days</option>
-                <option value="30d">Last 30 days</option>
-                <option value="90d">Last 90 days</option>
-                <option value="1y">Last year</option>
-              </select>
-            </div>
-            
-            <div className="flex items-center space-x-2 text-sm text-gray-600 pt-2 sm:pt-0">
-              <Calendar className="h-4 w-4" />
-              <span>{filteredOrders.length} orders found</span>
+              <div className="flex items-center space-x-3 bg-blue-50 px-4 py-2 rounded-xl">
+                <Calendar className="h-5 w-5 text-blue-600" />
+                <span className="font-medium text-blue-700">{filteredOrders.length} orders</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Orders - Desktop Table View */}
-        <div className="hidden lg:block bg-white rounded-xl shadow-sm border overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="text-left p-4 font-semibold text-gray-700">Order ID</th>
-                  <th className="text-left p-4 font-semibold text-gray-700">Stock</th>
-                  <th className="text-left p-4 font-semibold text-gray-700">Type</th>
-                  <th className="text-left p-4 font-semibold text-gray-700">Quantity</th>
-                  <th className="text-left p-4 font-semibold text-gray-700">Price</th>
-                  <th className="text-left p-4 font-semibold text-gray-700">Total</th>
-                  <th className="text-left p-4 font-semibold text-gray-700">Status</th>
-                  <th className="text-left p-4 font-semibold text-gray-700">Date & Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredOrders.length === 0 ? (
+          {/* Orders - Desktop Table View */}
+          <div className="hidden lg:block bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 hover:shadow-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
                   <tr>
-                    <td colSpan={8} className="text-center py-8 text-gray-500">
-                      No orders found matching your criteria
-                    </td>
+                    <th className="text-left p-6 font-semibold">Order ID</th>
+                    <th className="text-left p-6 font-semibold">Stock</th>
+                    <th className="text-left p-6 font-semibold">Type</th>
+                    <th className="text-left p-6 font-semibold">Quantity</th>
+                    <th className="text-left p-6 font-semibold">Price</th>
+                    <th className="text-left p-6 font-semibold">Total</th>
+                    <th className="text-left p-6 font-semibold">Status</th>
+                    <th className="text-left p-6 font-semibold">Date & Time</th>
                   </tr>
-                ) : (
-                  filteredOrders.map((order) => (
-                    <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="p-4">
-                        <div className="font-mono text-sm text-gray-900">{order.id}</div>
-                      </td>
-                      <td className="p-4">
-                        <div>
-                          <div className="font-semibold text-gray-900">{order.symbol}</div>
-                          <div className="text-sm text-gray-600">{order.company}</div>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="space-y-1">
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            order.type === 'BUY' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-                          }`}>
-                            {order.type}
-                          </span>
-                          <div className="text-xs text-gray-600">{order.orderType}</div>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="font-semibold text-gray-900">{order.quantity}</div>
-                      </td>
-                      <td className="p-4">
-                        <div>
-                          <div className="font-semibold text-gray-900">{formatCurrency(order.price)}</div>
-                          {order.executedPrice && order.executedPrice !== order.price && (
-                            <div className="text-sm text-gray-600">
-                              Exec: {formatCurrency(order.executedPrice)}
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="font-semibold text-gray-900">{formatCurrency(order.total)}</div>
-                      </td>
-                      <td className="p-4">
-                        <div className="flex items-center space-x-2">
-                          {getStatusIcon(order.status)}
-                          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                            {order.status}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="p-4">
-                        <div className="text-sm">
-                          <div className="text-gray-900">{order.date}</div>
-                          <div className="text-gray-600">{order.time}</div>
+                </thead>
+                <tbody>
+                  {filteredOrders.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="text-center py-12 text-slate-500">
+                        <div className="space-y-2">
+                          <div className="text-xl">No orders found</div>
+                          <div className="text-sm">Try adjusting your filters</div>
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Orders - Mobile/Tablet Card View */}
-        <div className="lg:hidden space-y-3">
-          {filteredOrders.length === 0 ? (
-            <div className="bg-white rounded-lg border p-6 text-center text-gray-500">
-              No orders found matching your criteria
+                  ) : (
+                    filteredOrders.map((order, index) => (
+                      <tr 
+                        key={order.id} 
+                        className="border-b border-slate-100 hover:bg-blue-50/50 transition-all duration-300 group"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <td className="p-6">
+                          <div className="font-mono text-sm text-slate-700 group-hover:text-blue-600 transition-colors duration-300">
+                            {order.id}
+                          </div>
+                        </td>
+                        <td className="p-6">
+                          <div className="space-y-1">
+                            <div className="font-bold text-slate-800 text-lg group-hover:text-blue-600 transition-colors duration-300">
+                              {order.symbol}
+                            </div>
+                            <div className="text-sm text-slate-500">{order.company}</div>
+                          </div>
+                        </td>
+                        <td className="p-6">
+                          <div className="space-y-2">
+                            <div className="flex items-center space-x-2">
+                              {order.type === 'BUY' ? (
+                                <TrendingUp className="h-4 w-4 text-emerald-500" />
+                              ) : (
+                                <TrendingDown className="h-4 w-4 text-red-500" />
+                              )}
+                              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${
+                                order.type === 'BUY' 
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                                  : 'bg-red-50 text-red-700 border-red-200'
+                              }`}>
+                                {order.type}
+                              </span>
+                            </div>
+                            <div className="text-xs text-slate-500 font-medium">{order.orderType}</div>
+                          </div>
+                        </td>
+                        <td className="p-6">
+                          <div className="font-bold text-slate-800 text-lg">{order.quantity}</div>
+                        </td>
+                        <td className="p-6">
+                          <div className="space-y-1">
+                            <div className="font-bold text-slate-800">{formatCurrency(order.price)}</div>
+                            {order.executedPrice && order.executedPrice !== order.price && (
+                              <div className="text-sm text-blue-600 font-medium">
+                                Exec: {formatCurrency(order.executedPrice)}
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="p-6">
+                          <div className="font-bold text-slate-800 text-lg">{formatCurrency(order.total)}</div>
+                        </td>
+                        <td className="p-6">
+                          <div className="flex items-center space-x-3">
+                            {getStatusIcon(order.status)}
+                            <span className={`inline-flex items-center px-3 py-1 rounded-xl text-xs font-bold border ${getStatusColor(order.status)}`}>
+                              {order.status}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="p-6">
+                          <div className="space-y-1">
+                            <div className="text-slate-700 font-medium">{order.date}</div>
+                            <div className="text-slate-500 text-sm">{order.time}</div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
-          ) : (
-            filteredOrders.map((order) => (
-              <div key={order.id} className="bg-white rounded-lg border shadow-sm">
-                {/* Card Header */}
-                <div className="p-4 border-b border-gray-100">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div>
-                        <div className="font-semibold text-gray-900 text-base">{order.symbol}</div>
-                        <div className="text-sm text-gray-600">{order.company}</div>
+          </div>
+
+          {/* Orders - Mobile/Tablet Card View */}
+          <div className="lg:hidden space-y-4">
+            {filteredOrders.length === 0 ? (
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 p-8 text-center">
+                <div className="space-y-2">
+                  <div className="text-xl text-slate-700">No orders found</div>
+                  <div className="text-slate-500">Try adjusting your filters</div>
+                </div>
+              </div>
+            ) : (
+              filteredOrders.map((order, index) => (
+                <div 
+                  key={order.id} 
+                  className="bg-white/70 backdrop-blur-sm rounded-2xl border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  {/* Card Header */}
+                  <div className="p-6 border-b border-slate-100">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl text-white">
+                          {order.type === 'BUY' ? (
+                            <TrendingUp className="h-6 w-6" />
+                          ) : (
+                            <TrendingDown className="h-6 w-6" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-bold text-slate-800 text-xl group-hover:text-blue-600 transition-colors duration-300">
+                            {order.symbol}
+                          </div>
+                          <div className="text-sm text-slate-500">{order.company}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        {getStatusIcon(order.status)}
+                        <span className={`inline-flex items-center px-3 py-1 rounded-xl text-xs font-bold border ${getStatusColor(order.status)}`}>
+                          {order.status}
+                        </span>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      {getStatusIcon(order.status)}
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                        {order.status}
-                      </span>
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="p-6">
+                    <div className="grid grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Order Type</div>
+                        <div className="flex items-center space-x-2">
+                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${
+                            order.type === 'BUY' 
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                              : 'bg-red-50 text-red-700 border-red-200'
+                          }`}>
+                            {order.type}
+                          </span>
+                          <span className="text-sm text-slate-600 font-medium">{order.orderType}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Quantity</div>
+                        <div className="font-bold text-slate-800 text-xl">{order.quantity}</div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Price</div>
+                        <div className="font-bold text-slate-800 text-lg">{formatCurrency(order.price)}</div>
+                        {order.executedPrice && order.executedPrice !== order.price && (
+                          <div className="text-sm text-blue-600 font-medium">
+                            Exec: {formatCurrency(order.executedPrice)}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-2">Total</div>
+                        <div className="font-bold text-slate-800 text-lg">{formatCurrency(order.total)}</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                      <div>
+                        <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-1">Order ID</div>
+                        <div className="font-mono text-sm text-slate-700">{order.id}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-1">Date & Time</div>
+                        <div className="text-sm text-slate-700 font-medium">{order.date}</div>
+                        <div className="text-sm text-slate-500">{order.time}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
+              ))
+            )}
+          </div>
 
-                {/* Card Content */}
-                <div className="p-4">
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Order Type</div>
-                      <div className="flex items-center space-x-2">
-                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                          order.type === 'BUY' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
-                        }`}>
-                          {order.type}
-                        </span>
-                        <span className="text-sm text-gray-600">{order.orderType}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Quantity</div>
-                      <div className="font-semibold text-gray-900">{order.quantity}</div>
-                    </div>
+          {/* Summary Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                label: 'Total Orders',
+                value: orders.length,
+                color: 'from-blue-500 to-indigo-500',
+                bgColor: 'bg-blue-50',
+                icon: Calendar
+              },
+              {
+                label: 'Filled Orders',
+                value: orders.filter(o => o.status === 'Filled').length,
+                color: 'from-emerald-500 to-green-500',
+                bgColor: 'bg-emerald-50',
+                icon: CheckCircle
+              },
+              {
+                label: 'Pending Orders',
+                value: orders.filter(o => o.status === 'Pending').length,
+                color: 'from-amber-500 to-orange-500',
+                bgColor: 'bg-amber-50',
+                icon: Clock
+              },
+              {
+                label: 'Total Volume',
+                value: formatCurrency(orders.reduce((sum, order) => sum + order.total, 0)),
+                color: 'from-purple-500 to-pink-500',
+                bgColor: 'bg-purple-50',
+                icon: TrendingUp
+              }
+            ].map((stat, index) => (
+              <div 
+                key={stat.label}
+                className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-xl ${stat.bgColor} group-hover:scale-110 transition-transform duration-300`}>
+                    <stat.icon className={`h-6 w-6 bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`} />
                   </div>
-
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Price</div>
-                      <div className="font-semibold text-gray-900">{formatCurrency(order.price)}</div>
-                      {order.executedPrice && order.executedPrice !== order.price && (
-                        <div className="text-sm text-gray-600">
-                          Exec: {formatCurrency(order.executedPrice)}
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Total</div>
-                      <div className="font-semibold text-gray-900">{formatCurrency(order.total)}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <div>
-                      <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Order ID</div>
-                      <div className="font-mono text-sm text-gray-900">{order.id}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Date & Time</div>
-                      <div className="text-sm text-gray-900">{order.date}</div>
-                      <div className="text-sm text-gray-600">{order.time}</div>
-                    </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-sm text-slate-500 font-medium">{stat.label}</div>
+                  <div className={`text-2xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                    {stat.value}
                   </div>
                 </div>
               </div>
-            ))
-          )}
-        </div>
-
-        {/* Summary Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="bg-white rounded-lg p-4 border">
-            <div className="text-xs sm:text-sm text-gray-600 mb-1">Total Orders</div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900">{orders.length}</div>
-          </div>
-          <div className="bg-white rounded-lg p-4 border">
-            <div className="text-xs sm:text-sm text-gray-600 mb-1">Filled Orders</div>
-            <div className="text-xl sm:text-2xl font-bold text-emerald-600">
-              {orders.filter(o => o.status === 'Filled').length}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg p-4 border">
-            <div className="text-xs sm:text-sm text-gray-600 mb-1">Pending Orders</div>
-            <div className="text-xl sm:text-2xl font-bold text-yellow-600">
-              {orders.filter(o => o.status === 'Pending').length}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg p-4 border">
-            <div className="text-xs sm:text-sm text-gray-600 mb-1">Total Volume</div>
-            <div className="text-lg sm:text-2xl font-bold text-blue-600">
-              {formatCurrency(orders.reduce((sum, order) => sum + order.total, 0))}
-            </div>
+            ))}
           </div>
         </div>
       </div>

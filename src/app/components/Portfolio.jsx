@@ -3,7 +3,7 @@
 import React from 'react';
 import { Plus, Activity } from 'lucide-react';
 
-const Portfolio = ({ 
+const Portfolio = ({
   getDisplayName,
   totalValue,
   cash,
@@ -22,74 +22,76 @@ const Portfolio = ({
   RecentTradesList
 }) => {
   return (
-    <div>
-      <div className="mb-8 bg-white rounded-lg shadow p-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
-           Welcome, {getDisplayName()}!
+    <div className="bg-blue-50 min-h-screen py-8">
+      {/* Welcome Header */}
+      <div className="mb-8 bg-white rounded-2xl shadow-md p-6 mx-4 animate-fade-in">
+        <h3 className="text-2xl font-bold text-blue-700 text-center">
+          Welcome, {getDisplayName()}!
         </h3>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Portfolio Summary Cards */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Summary */}
         <PortfolioSummary
           totalValue={totalValue + cash}
           portfolioValue={totalValue}
           cash={cash}
           totalGainLoss={totalGainLoss}
           totalGainLossPercent={totalGainLossPercent}
-          className="mb-8"
+          className="mb-10"
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Holdings Table */}
+          {/* Holdings */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm border">
-              <div className="p-6 border-b">
-                <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-semibold text-gray-900">Your Holdings</h2>
-                  <button 
-                    onClick={handleAddPosition}
-                    className="flex items-center space-x-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
-                  >
-                    <Plus className="h-4 w-4" />
-                    <span>Add Position</span>
-                  </button>
-                </div>
+            <div className="bg-white rounded-2xl shadow-lg border border-blue-100 transition-transform hover:scale-[1.01] duration-300">
+              <div className="p-6 border-b border-blue-100 flex justify-between items-center">
+                <h2 className="text-xl font-semibold text-blue-800">Your Holdings</h2>
+                <button
+                  onClick={handleAddPosition}
+                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Add Position</span>
+                </button>
               </div>
-              
+
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-100">
-                      <th className="text-left p-4 font-medium text-gray-600">Symbol</th>
-                      <th className="text-left p-4 font-medium text-gray-600">Shares</th>
-                      <th className="text-left p-4 font-medium text-gray-600">Avg Price</th>
-                      <th className="text-left p-4 font-medium text-gray-600">Current Price</th>
-                      <th className="text-left p-4 font-medium text-gray-600">Value</th>
-                      <th className="text-left p-4 font-medium text-gray-600">P&L</th>
+                    <tr className="text-left text-blue-600 bg-blue-50">
+                      <th className="p-4">Symbol</th>
+                      <th className="p-4">Shares</th>
+                      <th className="p-4">Avg Price</th>
+                      <th className="p-4">Current Price</th>
+                      <th className="p-4">Value</th>
+                      <th className="p-4">P&L</th>
                     </tr>
                   </thead>
                   <tbody>
                     {mockPortfolio?.map((stock, index) => {
                       const gainLoss = (stock.currentPrice - stock.avgPrice) * stock.shares;
                       const gainLossPercent = ((stock.currentPrice - stock.avgPrice) / stock.avgPrice) * 100;
-                      
+
                       return (
-                        <tr key={index} className="border-b border-gray-50 hover:bg-gray-50">
+                        <tr
+                          key={index}
+                          className="border-b border-gray-100 hover:bg-blue-50 transition-all duration-200"
+                        >
                           <td className="p-4">
                             <div>
-                              <div className="font-semibold text-gray-900">{stock.symbol}</div>
-                              <div className="text-sm text-gray-600">{stock.company}</div>
+                              <div className="font-semibold text-blue-900">{stock.symbol}</div>
+                              <div className="text-xs text-gray-500">{stock.company}</div>
                             </div>
                           </td>
-                          <td className="p-4 text-gray-900">{stock.shares}</td>
-                          <td className="p-4 text-gray-900">{formatCurrency(stock.avgPrice)}</td>
-                          <td className="p-4 text-gray-900">{formatCurrency(stock.currentPrice)}</td>
-                          <td className="p-4 text-gray-900 font-semibold">{formatCurrency(stock.value)}</td>
+                          <td className="p-4 text-blue-900">{stock.shares}</td>
+                          <td className="p-4 text-blue-900">{formatCurrency(stock.avgPrice)}</td>
+                          <td className="p-4 text-blue-900">{formatCurrency(stock.currentPrice)}</td>
+                          <td className="p-4 font-semibold text-blue-900">{formatCurrency(stock.value)}</td>
                           <td className="p-4">
-                            <div className={`${gainLoss >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                            <div className={gainLoss >= 0 ? 'text-emerald-600' : 'text-red-600'}>
                               <div className="font-semibold">{formatCurrency(gainLoss)}</div>
-                              <div className="text-sm">{formatPercent(gainLossPercent)}</div>
+                              <div className="text-xs">{formatPercent(gainLossPercent)}</div>
                             </div>
                           </td>
                         </tr>
@@ -103,23 +105,20 @@ const Portfolio = ({
 
           {/* Sidebar */}
           <div className="space-y-6">
-            <StockSearchList 
-              onSearch={handleSearch} 
-              onTrade={handleTrade} 
-            />
-            
-            <RecentTradesList 
-              trades={mockRecentTrades} 
+            <StockSearchList onSearch={handleSearch} onTrade={handleTrade} />
+
+            <RecentTradesList
+              trades={mockRecentTrades}
               onViewAllTrades={handleViewAllTrades}
               maxTrades={5}
             />
 
-            {/* Performance Chart Placeholder */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Portfolio Performance</h3>
-              <div className="h-32 bg-gradient-to-r from-emerald-50 to-blue-50 rounded-lg flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <Activity className="h-8 w-8 mx-auto mb-2" />
+            {/* Performance Chart */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100">
+              <h3 className="text-lg font-semibold text-blue-800 mb-4">Portfolio Performance</h3>
+              <div className="h-32 bg-gradient-to-r from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                <div className="text-center text-blue-500">
+                  <Activity className="h-8 w-8 mx-auto mb-2 animate-pulse" />
                   <p className="text-sm">Chart coming soon</p>
                 </div>
               </div>
