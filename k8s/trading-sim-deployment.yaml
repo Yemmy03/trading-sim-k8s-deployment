@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: trading-sim
   labels:
-    app: trading-sim staging
+    app: trading-sim-staging
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trading-sim staging
+      app: trading-sim-staging
   template:
     metadata:
       labels:
-        app: trading-sim staging
+        app: trading-sim-staging
     spec:
       containers:
       - name: trading-sim
@@ -20,7 +20,7 @@ spec:
         ports:
         - containerPort: 3000
         envFrom:
-      - configMapRef:
-          name: trading-sim-config 
+        - configMapRef:
+            name: trading-sim-config 
 
 
