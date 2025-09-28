@@ -72,7 +72,7 @@ spec:
   selector:
     app: trading-sim-staging
   ports:
-  - name: name-of-service-port
+  - name: http
     protocol: TCP
     port: 80
     targetPort: 3000
