@@ -12,20 +12,22 @@ Defines the app’s pod and container spec:
 - Exposes port **3000** inside the pod.
 - Pulls environment variables from a **ConfigMap**.
 
-\`\`\`yaml
+```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: trading-sim
+  labels:
+    app: trading-sim-staging
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trading-sim
+      app: trading-sim-staging
   template:
     metadata:
       labels:
-        app: trading-sim
+        app: trading-sim-staging
     spec:
       containers:
       - name: trading-sim
@@ -34,86 +36,99 @@ spec:
         - containerPort: 3000
         envFrom:
         - configMapRef:
-            name: trading-sim-config
-\`\`\`
+            name: trading-sim-config 
+```
 
 ---
 
 ### 2. ConfigMap (`trading-sim-config.yaml`)
 Stores non-sensitive configuration for the app.
 
-\`\`\`yaml
+```
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: trading-sim-config
 data:
-  DEMO_GREETING: "Welcome to Trading-Sim"
-  DEMO_MODE: "true"
-\`\`\`
+  NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAY_P5ep3xxp88XhJ_djiAHeSfibg8ubrw
+  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=trading-simulator-440a8.firebaseapp.com
+  NEXT_PUBLIC_FIREBASE_PROJECT_ID=trading-simulator-440a8
+  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=trading-simulator-440a8.appspot.com
+  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=398224444164
+  NEXT_PUBLIC_FIREBASE_APP_ID=1:398224444164:web:01bee014b96c9ffa3a5e51
+```
 
 ---
 
 ### 3. Service (`trading-sim-service.yaml`)
-Exposes the app to the cluster (and optionally outside).
+Exposes the app to the cluster.
 
-\`\`\`yaml
+```
 apiVersion: v1
 kind: Service
 metadata:
   name: trading-sim-service
 spec:
   selector:
-    app: trading-sim
+    app: trading-sim-staging
   ports:
-  - protocol: TCP
-    port: 80        # service port
-    targetPort: 3000  # container port
+  - name: name-of-service-port
+    protocol: TCP
+    port: 80
+    targetPort: 3000
   type: NodePort
-\`\`\`
+```
 
 ---
 
-## 🚀 Usage
+## Usage
 
 1. **Clone the repo**
-   \`\`\`bash
+  ```
    git clone git@github.com:Yemmy03/trading-sim-k8s.git
    cd trading-sim-k8s
-   \`\`\`
+   ```
 
 2. **Apply ConfigMap**
-   \`\`\`bash
+   ```
    kubectl apply -f trading-sim-config.yaml
-   \`\`\`
+   ```
 
 3. **Apply Deployment**
-   \`\`\`bash
+   ```
    kubectl apply -f trading-sim-deployment.yaml
-   \`\`\`
+   ```
 
 4. **Apply Service**
-   \`\`\`bash
+   ```
    kubectl apply -f trading-sim-service.yaml
-   \`\`\`
+   ```
 
 5. **Verify**
-   \`\`\`bash
+   ```
    kubectl get pods
    kubectl get svc
-   \`\`\`
+   ```
 
 6. **Access App**
-   - Using NodePort:  
-     \`\`\`
+    Using NodePort:  
+     ```
      http://<node-ip>:<node-port>
-     \`\`\`
-   - Example: \`http://localhost:30080\`
+     Example: \http://localhost:30080\
+     ```
+Why is the app accessed at http://localhost:30080 instead of 3000?
+```
+The app itself runs on port 3000 inside the container, but because the Kubernetes Service is of type NodePort, Kubernetes opens a high external port in the range 30000–32767 (for example, 30080).
 
+The traffic flow looks like this:
+Browser → NodePort (30080) → Service port (80) → Container port (3000).
+
+That’s why it reaches the app at http://localhost:30080.
+```
 ---
 
-## 📖 References
+## References
 - [Kubernetes Docs – Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)  
 - [Kubernetes Docs – ConfigMaps](https://kubernetes.io/docs/concepts/configuration/configmap/)  
 - [Kubernetes Docs – Services](https://kubernetes.io/docs/concepts/services-networking/service/)  
-EOF
+
